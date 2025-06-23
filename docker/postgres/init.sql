@@ -117,6 +117,8 @@ INSERT INTO post(
     position,
     expiration,
     deleteFlag,
+    createUser,
+    updateUser,
     creation,
     modification,
     version
@@ -132,6 +134,8 @@ INSERT INTO post(
     'フロントエンド',
     NOW() + INTERVAL '10 days',
     FALSE,
+    1,
+    1,
     NOW(),
     NOW(),
     0
