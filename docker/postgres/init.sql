@@ -1,6 +1,4 @@
 
-\c next_db
-
 BEGIN;
 
 -- user_account テーブルの作成
@@ -44,7 +42,7 @@ CREATE TABLE public.Post (
     techs text NOT NULL,
     contactTool text NOT NULL,
     position text NOT NULL,
-    expiration text NOT NULL,
+    expiration timestamp without time zone NOT NULL,
     deleteFlag boolean NOT NULL DEFAULT FALSE,
     createUser bigint,
     updateUser bigint,
@@ -58,8 +56,8 @@ CREATE SEQUENCE PostSeq;
 --Bookmark テーブル作成
 CREATE TABLE public.Bookmark (
     id bigint NOT NULL,
-    fkUser number NOT NULL,
-    fkPost number NOT NULL,
+    fkUser bigint NOT NULL,
+    fkPost bigint NOT NULL,
     createUser bigint,
     updateUser bigint,
     creation timestamp without time zone NOT NULL,
