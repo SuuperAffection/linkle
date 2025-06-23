@@ -5,6 +5,9 @@ export namespace User_AccountVO {
         displayName: string
         userId: string
         pw: string
+        techs?: string
+        department?: string
+        comment?: string
         deleteFlag: boolean
         createUser?: number
         updateUser?: number
@@ -18,6 +21,9 @@ export namespace User_AccountVO {
             displayName: '',
             userId: '',
             pw: '',
+            techs: '',
+            department: '',
+            comment: '',
             deleteFlag: false,
             creation: '',
             modification: '',

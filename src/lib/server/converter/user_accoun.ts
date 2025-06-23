@@ -8,6 +8,9 @@ export namespace User_AccountConverter {
             displayName: src.displayName,
             userId: src.userId,
             pw: src.pw,
+            techs: src.techs,
+            department: src.department,
+            comment: src.comment,
             deleteFlag: src.deleteFlag,
             createUser: src.createUser,
             updateUser: src.updateUser,
@@ -22,11 +25,10 @@ export namespace User_AccountConverter {
             dest.displayName = src.displayName,
             dest.userId = src.userId,
             dest.pw = src.pw,
+            dest.techs = src.techs,
+            dest.department = src.department,
+            dest.comment = src.comment,
             dest.deleteFlag = src.deleteFlag,
-            dest.createUser = src.createUser,
-            dest.updateUser = src.updateUser,
-            dest.creation = new Date(src.creation),
-            dest.modification = new Date(src.modification),
             dest.version = src.version
     }
 }

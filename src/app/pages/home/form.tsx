@@ -6,13 +6,32 @@ import { Recruitment } from '@/lib/components/recruitment/recruitment'
 import { InputText } from 'primereact/inputtext'
 import 'primeicons/primeicons.css';
 import { Button } from 'primereact/button'
+import { useRouter } from 'next/navigation'
 
 export default function Form() {
+    const router = useRouter()
+
+
     return (
         <>
             <div className={styles.masterBox}>
                 <Linkleheader>
-
+                    <div className={styles.header}>
+                        <div className={styles.insideHeaderBox}>
+                            <p>ホーム</p>
+                        </div>
+                        <div className={styles.insideHeaderBox}>
+                            <p>ブックマーク</p>
+                        </div>
+                        <div className={styles.insideHeaderBox}>
+                            <i
+                                className='pi pi-user'
+                                onClick={() => {
+                                    router.push('/pages/myPage')
+                                }}
+                            ></i>
+                        </div>
+                    </div>
                 </Linkleheader>
 
                 <div className={styles.body}>
@@ -62,7 +81,6 @@ export default function Form() {
                                     label='検索'
                                     className={styles.searchBtn}
                                 />
-
                             </div>
 
                         </div>
@@ -76,7 +94,7 @@ export default function Form() {
                                     description={
                                         `6月21日にあるサポーターズ主催のハッカソンに参加する予定です。
                                                 作るものはまだ決めていないので、みんなでアイデアを出しながら制作したいと思って
-                                                います。…
+                                                います。
                                                 `}
                                     tech='未定'
                                     position='フロントエンド'

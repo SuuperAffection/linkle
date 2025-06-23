@@ -9,6 +9,9 @@ CREATE TABLE public.User_Account (
     displayName text NOT NULL,
     userId text NOT NULL UNIQUE,
     pw text NOT NULL,
+    techs text,
+    department text,
+    comment text,
     deleteFlag boolean NOT NULL DEFAULT FALSE,
     createUser bigint,
     updateUser bigint,
@@ -32,6 +35,40 @@ CREATE TABLE public.Session (
 );
 
 CREATE SEQUENCE SessionSeq;
+
+-- post テーブル作成
+CREATE TABLE public.Post (
+    id bigint NOT NULL,
+    title text NOT NULL,
+    mainText text NOT NULL,
+    techs text NOT NULL,
+    contactTool text NOT NULL,
+    position text NOT NULL,
+    expiration text NOT NULL,
+    deleteFlag boolean NOT NULL DEFAULT FALSE,
+    createUser bigint,
+    updateUser bigint,
+    creation timestamp without time zone NOT NULL,
+    modification timestamp without time zone NOT NULL,
+    version bigint NOT NULL
+);
+
+CREATE SEQUENCE PostSeq;
+
+--Bookmark テーブル作成
+CREATE TABLE public.Bookmark (
+    id bigint NOT NULL,
+    fkUser number NOT NULL,
+    fkPost number NOT NULL,
+    createUser bigint,
+    updateUser bigint,
+    creation timestamp without time zone NOT NULL,
+    modification timestamp without time zone NOT NULL
+);
+
+CREATE SEQUENCE BookmarkSeq;
+
+-- 初期データ挿入
 
 INSERT INTO user_account(
     id,
@@ -68,6 +105,35 @@ INSERT INTO user_account(
     'test2',
     'pass',
     false,
+    NOW(),
+    NOW(),
+    0
+);
+
+INSERT INTO post(
+    id,
+    title,
+    mainText,
+    techs,
+    contactTool,
+    position,
+    expiration,
+    deleteFlag,
+    creation,
+    modification,
+    version
+) VALUES (
+    NEXTVAL('PostSeq'),
+    'ハッカソンのチームメンバー募集',
+    $$
+    6月21日にあるサポーターズ主催のハッカソンに参加する予定です。
+    作るものはまだ決めていないので、みんなでアイデアを出しながら制作したいと思っています。
+    $$,
+    'Next.js / React / TypeScript',
+    'teams',
+    'フロントエンド',
+    NOW() + INTERVAL '10 days',
+    FALSE,
     NOW(),
     NOW(),
     0

@@ -1,5 +1,4 @@
 import { ClientBase } from "pg"
-import { use } from "react"
 import SQL, { SQLStatement } from "sql-template-strings"
 import { User_Account } from "../entity/user_account"
 
@@ -11,6 +10,9 @@ export namespace UserAccountDAO {
             user_account.displayName AS displayName,
             user_account.userId AS userId,
             user_account.pw AS pw,
+            user_account.techs AS techs,
+            user_account.department AS department,
+            user_account.comment AS comment,
             user_account.deleteFlag AS deleteFlag,
             user_account.createUser AS createUser,
             user_account.updateUser AS updateUser,
