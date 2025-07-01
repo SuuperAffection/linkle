@@ -53,6 +53,15 @@ export function reducer(state: State, action: ActionType): State {
           ...state,
           expiration: action.payload.value
         }
+        case 'clear': return {
+          // 全ての入力値をクリアする
+          ...state,
+          keyword: '',
+          techs: '',
+          tool: '',
+          position: '',
+          expiration: ''
+        }
       }
     }
   }

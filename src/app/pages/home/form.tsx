@@ -96,11 +96,7 @@ export default function Form() {
                                     outlined
                                     className={styles.clearBtn}
                                     onClick={() => {
-                                        dispatch({ type: 'EDIT_FORM', payload: { targetName: 'keyword', value: '' } })
-                                        dispatch({ type: 'EDIT_FORM', payload: { targetName: 'techs', value: '' } })
-                                        dispatch({ type: 'EDIT_FORM', payload: { targetName: 'tool', value: '' } })
-                                        dispatch({ type: 'EDIT_FORM', payload: { targetName: 'position', value: '' } })
-                                        dispatch({ type: 'EDIT_FORM', payload: { targetName: 'expiration', value: '' } })
+                                        Action.editForm(dispatch, 'clear', '')
                                     }}
                                 />
                                 <Button
