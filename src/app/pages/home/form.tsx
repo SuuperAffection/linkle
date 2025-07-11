@@ -7,9 +7,13 @@ import { InputText } from 'primereact/inputtext'
 import 'primeicons/primeicons.css';
 import { Button } from 'primereact/button'
 import { useRouter } from 'next/navigation'
+import { defaultState, reducer } from './reduser'
+import { useReducer } from 'react'
+import { Action } from './action'
 
 export default function Form() {
     const router = useRouter()
+    const [state, dispatch] = useReducer(reducer, undefined, defaultState)
 
 
     return (
@@ -41,32 +45,48 @@ export default function Form() {
                             <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
                                     <i className='pi pi-search' />
-                                    <InputText type="text" placeholder='キーワードを入力' className={styles.keyWord} />
+                                    <InputText type="text" placeholder='キーワードを入力' className={styles.keyWord} 
+                                    value={state.keyword}
+                                    onChange={(e) => Action.editForm(dispatch, 'keyword', e.target.value)}
+                                    />
+
                                 </span>
                             </div>
 
                             <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
                                     <i className='pi pi-search' />
-                                    <InputText type="text" placeholder='使用する技術' className={styles.keyWord} />
+                                    <InputText type="text" placeholder='使用する技術' className={styles.keyWord} 
+                                    value={state.techs}
+                                    onChange={(e) => Action.editForm(dispatch, 'techs', e.target.value)}
+                                    />
                                 </span>
                             </div>
 
                             <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
-                                    <InputText type="text" placeholder='連絡ツール' className={styles.noIcon} />
+                                    <InputText type="text" placeholder='連絡ツール' className={styles.noIcon} 
+                                    value={state.tool}
+                                    onChange={(e) => Action.editForm(dispatch, 'tool', e.target.value)}
+                                    />
                                 </span>
                             </div>
 
                             <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
-                                    <InputText type="text" placeholder='募集ポジション' className={styles.noIcon} />
+                                    <InputText type="text" placeholder='募集ポジション' className={styles.noIcon} 
+                                    value={state.position}
+                                    onChange={(e) => Action.editForm(dispatch, 'position', e.target.value)}
+                                    />
                                 </span>
                             </div>
 
                             <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
-                                    <InputText type="text" placeholder='募集期間' className={styles.noIcon} />
+                                    <InputText type="text" placeholder='募集期間' className={styles.noIcon} 
+                                    value={state.expiration}
+                                    onChange={(e) => Action.editForm(dispatch, 'expiration', e.target.value)}
+                                    />
                                 </span>
                             </div>
 
@@ -75,8 +95,10 @@ export default function Form() {
                                     label='条件のクリア'
                                     outlined
                                     className={styles.clearBtn}
+                                    onClick={() => {
+                                        Action.editForm(dispatch, 'clear', '')
+                                    }}
                                 />
-
                                 <Button
                                     label='検索'
                                     className={styles.searchBtn}
