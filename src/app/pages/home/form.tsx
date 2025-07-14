@@ -7,10 +7,17 @@ import { InputText } from 'primereact/inputtext'
 import 'primeicons/primeicons.css';
 import { Button } from 'primereact/button'
 import { useRouter } from 'next/navigation'
+import { useEffect, useReducer } from 'react'
+import { defaultState, reducer } from './reducer'
+import { Action } from './action'
 
 export default function Form() {
     const router = useRouter()
+    const [state, dispatche] = useReducer(reducer, undefined, defaultState)
 
+    useEffect(() => {
+        Action.getPost(dispatche)
+    }, [])
 
     return (
         <>
@@ -87,20 +94,17 @@ export default function Form() {
                     </div>
                     <div className={styles.recruitArea}>
 
-                        <div className={styles.recWrap}>
-                            <div className={styles.recBox}>
-                                <Recruitment
-                                    title='ハッカソンのチームメンバー募集'
-                                    description={
-                                        `6月21日にあるサポーターズ主催のハッカソンに参加する予定です。
-                                                作るものはまだ決めていないので、みんなでアイデアを出しながら制作したいと思って
-                                                います。
-                                                `}
-                                    tech='未定'
-                                    position='フロントエンド'
-                                />
-                            </div>
-                        </div>
+                        {state.posts.map((post) =>
+                            <div key={post.id} className={styles.recWrap}>
+                                <div className={styles.recBox}>
+                                    <Recruitment
+                                        title={post.title}
+                                        description={post.mainText}
+                                        tech={post.techs}
+                                        position={post.position}
+                                    />
+                                </div>
+                            </div>)}
                     </div>
                 </div>
             </div >
