@@ -134,8 +134,8 @@ INSERT INTO post(
     'フロントエンド',
     NOW() + INTERVAL '10 days',
     FALSE,
-    1,
-    1,
+    2,
+    2,
     NOW(),
     NOW(),
     0
