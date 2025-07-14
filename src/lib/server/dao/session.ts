@@ -7,14 +7,14 @@ export namespace SessionDAO {
     export function baseSQL(): SQLStatement {
         return SQL`
         SELECT 
-            session.fkUser AS fkUser,
-            session.token AS token,
-            session.expiration AS expiration,
-            session.createUser AS createUser,
-            session.updateUser AS updateUser,
-            session.creation AS creation,
-            session.modification AS modificatin,
-            session.version AS version
+            session.fkUser AS "fkUser",
+            session.token AS "token",
+            session.expiration AS "expiration",
+            session.createUser AS "createUser",
+            session.updateUser AS "updateUser",
+            session.creation AS "creation",
+            session.modification AS "modificatin",
+            session.version AS "version"
         FROM
             session
         `

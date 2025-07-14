@@ -6,21 +6,21 @@ export namespace UserAccountDAO {
     export function baseSQL(): SQLStatement {
         return SQL`
             SELECT
-            user_account.id AS id,
-            user_account.displayName AS displayName,
-            user_account.userId AS userId,
-            user_account.pw AS pw,
-            user_account.techs AS techs,
-            user_account.department AS department,
-            user_account.comment AS comment,
-            user_account.deleteFlag AS deleteFlag,
-            user_account.createUser AS createUser,
-            user_account.updateUser AS updateUser,
-            user_account.creation AS creation,
-            user_account.modification AS modification,
-            user_account.version AS version
+            user_account.id AS "id",
+            user_account.displayName AS "displayName",
+            user_account.userId AS "userId",
+            user_account.pw AS "pw",
+            user_account.techs AS "techs",
+            user_account.department AS "department",
+            user_account.comment AS "comment",
+            user_account.deleteFlag AS "deleteFlag",
+            user_account.createUser AS "createUser",
+            user_account.updateUser AS "updateUser",
+            user_account.creation AS "creation",
+            user_account.modification AS "modification",
+            user_account.version AS "version"
         FROM
-            User_Account
+            user_account
             `
     }
 
