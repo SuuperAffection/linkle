@@ -3,7 +3,6 @@ export namespace Session {
         fkUser?: number
         token: string
         expiration?: Date
-
         createUser?: number
         updateUser?: number
         creation?: Date

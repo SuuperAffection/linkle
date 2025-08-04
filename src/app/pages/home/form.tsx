@@ -10,13 +10,14 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useReducer } from 'react'
 import { defaultState, reducer } from './reducer'
 import { Action } from './action'
+import { Progress } from '@/lib/components/progress/progress'
 
 export default function Form() {
     const router = useRouter()
     const [state, dispatche] = useReducer(reducer, undefined, defaultState)
 
     useEffect(() => {
-        Action.getPost(dispatche)
+        Action.getPost(dispatche, state.keyword, state.techs, state.position)
     }, [])
 
     return (
@@ -48,45 +49,84 @@ export default function Form() {
                             <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
                                     <i className='pi pi-search' />
-                                    <InputText type="text" placeholder='キーワードを入力' className={styles.keyWord} />
+                                    <InputText
+                                        type="text"
+                                        placeholder='キーワードを入力'
+                                        className={styles.keyWord}
+                                        value={state.keyword ?? ''}
+                                        onChange={(e) => {
+                                            Action.editForm(dispatche, 'keyword', e.target.value)
+                                        }}
+                                    />
                                 </span>
                             </div>
 
                             <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
                                     <i className='pi pi-search' />
-                                    <InputText type="text" placeholder='使用する技術' className={styles.keyWord} />
+                                    <InputText
+                                        type="text"
+                                        placeholder='使用する技術'
+                                        className={styles.keyWord}
+                                        value={state.techs}
+                                        onChange={(e) => {
+                                            Action.editForm(dispatche, 'techs', e.target.value)
+                                        }}
+                                    />
                                 </span>
                             </div>
 
-                            <div className={styles.searchWord}>
+                            {/* <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
-                                    <InputText type="text" placeholder='連絡ツール' className={styles.noIcon} />
+                                    <InputText
+                                        type="text"
+                                        placeholder='連絡ツール'
+                                        className={styles.noIcon}
+                                    />
                                 </span>
-                            </div>
+                            </div> */}
 
                             <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
-                                    <InputText type="text" placeholder='募集ポジション' className={styles.noIcon} />
+                                    <i className='pi pi-search' />
+                                    <InputText
+                                        type="text"
+                                        placeholder='募集ポジション'
+                                        className={styles.keyWord}
+                                        value={state.position}
+                                        onChange={(e) => {
+                                            Action.editForm(dispatche, 'position', e.target.value)
+                                        }}
+                                    />
                                 </span>
                             </div>
 
-                            <div className={styles.searchWord}>
+                            {/* <div className={styles.searchWord}>
                                 <span className='p-input-icon-left' style={{ width: '80%' }} >
-                                    <InputText type="text" placeholder='募集期間' className={styles.noIcon} />
+                                    <InputText
+                                        type="text"
+                                        placeholder='募集期間'
+                                        className={styles.noIcon}
+                                    />
                                 </span>
-                            </div>
+                            </div> */}
 
                             <div className={styles.btnArea}>
                                 <Button
                                     label='条件のクリア'
                                     outlined
                                     className={styles.clearBtn}
+                                    onClick={() => {
+                                        Action.editForm(dispatche, 'clear', undefined)
+                                    }}
                                 />
 
                                 <Button
                                     label='検索'
                                     className={styles.searchBtn}
+                                    onClick={() => {
+                                        Action.getPost(dispatche, state.keyword, state.techs, state.position)
+                                    }}
                                 />
                             </div>
 
@@ -108,6 +148,9 @@ export default function Form() {
                     </div>
                 </div>
             </div >
+            {state.isWaiting &&
+                <Progress />
+            }
         </>
     )
 }

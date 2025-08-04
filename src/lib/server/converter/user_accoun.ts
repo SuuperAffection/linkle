@@ -3,6 +3,9 @@ import { User_Account } from "../entity/user_account";
 
 export namespace User_AccountConverter {
     export function toVO(src: User_Account.Type): User_AccountVO.Type {
+
+        console.log(src.contact)
+
         return {
             id: src.id,
             displayName: src.displayName,
@@ -10,6 +13,7 @@ export namespace User_AccountConverter {
             pw: src.pw,
             techs: src.techs,
             department: src.department,
+            contact: src.contact,
             comment: src.comment,
             deleteFlag: src.deleteFlag,
             createUser: src.createUser,
@@ -27,6 +31,7 @@ export namespace User_AccountConverter {
             dest.pw = src.pw,
             dest.techs = src.techs,
             dest.department = src.department,
+            dest.contact = src.contact,
             dest.comment = src.comment,
             dest.deleteFlag = src.deleteFlag,
             dest.version = src.version

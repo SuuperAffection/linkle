@@ -12,6 +12,7 @@ export namespace UserAccountDAO {
             user_account.pw AS "pw",
             user_account.techs AS "techs",
             user_account.department AS "department",
+            user_account.contact AS "contact",
             user_account.comment AS "comment",
             user_account.deleteFlag AS "deleteFlag",
             user_account.createUser AS "createUser",
@@ -45,7 +46,28 @@ export namespace UserAccountDAO {
             `))
 
         return result.rows[0]
+    }
 
+    export async function update(client: ClientBase, entity: User_Account.Type): Promise<number> {
+        const result = await client.query(SQL`
+            UPDATE
+                user_account
+            SET
+                displayName = ${entity.displayName},
+                techs = ${entity.techs},
+                department = ${entity.department},
+                contact = ${entity.contact},
+                comment = ${entity.comment},
+
+                updateUser = ${entity.updateUser},
+                modification = NOW(),
+                version = version + 1
+            WHERE
+                id = cast(${entity.id} AS BIGINT) AND
+                version = cast(${entity.version} AS BIGINT)
+            `)
+
+        return result.rowCount ? result.rowCount : 0
     }
 
 }
