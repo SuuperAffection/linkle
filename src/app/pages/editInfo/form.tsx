@@ -5,8 +5,18 @@ import styles from './form.module.css'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
 import { Button } from 'primereact/button'
+import { useEffect, useReducer } from 'react'
+import { defaultState, reducer } from './reducer'
+import { Action } from './action'
+import { useRouter } from 'next/navigation'
 
 export default function Form() {
+    const [state, dispatch] = useReducer(reducer, undefined, defaultState)
+    const router = useRouter()
+
+    useEffect(() => {
+        Action.getUserData(dispatch)
+    }, [])
 
     return (
         <>
@@ -32,37 +42,63 @@ export default function Form() {
                                         <tr>
                                             <th>名前</th>
                                             <td>
-                                                <InputText className="p-inputtext-lg" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>学年</th>
-                                            <td>
-                                                <InputText className="p-inputtext-lg" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>連絡先</th>
-                                            <td>
-                                                <InputText className="p-inputtext-lg" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>使える技術</th>
-                                            <td>
-                                                <InputText className="p-inputtext-lg" />
+                                                <InputText
+                                                    className="p-inputtext-lg"
+                                                    value={state.user.displayName ?? ''}
+                                                    onChange={(e) => {
+                                                        Action.editForm(dispatch, 'displayName', e.target.value)
+                                                    }}
+                                                />
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>学科</th>
                                             <td>
-                                                <InputText className="p-inputtext-lg" />
+                                                <InputText
+                                                    className="p-inputtext-lg"
+                                                    value={state.user.department ?? ''}
+                                                    onChange={(e) => {
+                                                        Action.editForm(dispatch, 'department', e.target.value)
+                                                    }}
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>連絡先</th>
+                                            <td>
+                                                <InputText
+                                                    className="p-inputtext-lg"
+                                                    value={state.user.contact ?? ''}
+                                                    onChange={(e) => {
+                                                        Action.editForm(dispatch, 'contact', e.target.value)
+                                                    }}
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>使える技術</th>
+                                            <td>
+                                                <InputText
+                                                    className="p-inputtext-lg"
+                                                    value={state.user.techs ?? ''}
+                                                    onChange={(e) => {
+                                                        Action.editForm(dispatch, 'techs', e.target.value)
+                                                    }}
+                                                />
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>コメント</th>
                                             <td>
-                                                <InputTextarea rows={3} cols={26} autoResize />
+                                                <InputTextarea
+                                                    rows={3}
+                                                    cols={26}
+                                                    autoResize
+                                                    value={state.user.comment ?? ''}
+                                                    onChange={(e) => {
+                                                        Action.editForm(dispatch, 'comment', `${e.target.value}`)
+                                                    }}
+                                                />
                                             </td>
                                         </tr>
                                     </tbody>
@@ -72,7 +108,15 @@ export default function Form() {
                     </div>
 
                     <div className={styles.btnWrap}>
-                        <Button label='保存' className={styles.saveBtn} />
+                        <Button
+                            label='保存'
+                            className={styles.saveBtn}
+                            disabled={state.user.displayName === ''}
+                            onClick={() => {
+                                Action.saveUserData(dispatch, state.user)
+                                router.back()
+                            }}
+                        />
                     </div>
                 </div>
             </div>

@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { HomeAPI } from "./type";
+import { MyPageAPI } from "./type";
 import { ErrorInfo } from "react";
 import { ServerHandler } from "@/lib/server/util/db_util";
-import { StringUtils } from "@/lib/common/util/string_utils";
 import { SessionDAO } from "@/lib/server/dao/session";
-import { PostDAO } from "@/lib/server/dao/post";
+import { StringUtils } from "@/lib/common/util/string_utils";
 import { AuthenticationExeption, ServerExeption } from "@/lib/server/util/exeption";
+import { PostDAO } from "@/lib/server/dao/post";
 import { PostConverter } from "@/lib/server/converter/post";
+import { UserAccountDAO } from "@/lib/server/dao/user_account";
+import { User_AccountConverter } from "@/lib/server/converter/user_accoun";
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(
     req: NextRequest
-): Promise<NextResponse<HomeAPI.GET.Response | ErrorInfo>> {
+): Promise<NextResponse<MyPageAPI.GET.Responce | ErrorInfo>> {
     return ServerHandler.transaction(async (client) => {
         const token = StringUtils.nvl(req.cookies.get('token')?.value)
         const user = await SessionDAO.checkToken(client, token)
@@ -25,16 +27,16 @@ export async function GET(
             throw new ServerExeption()
         }
 
-        const json: HomeAPI.GET.Request = {
-            keyword: StringUtils.nvl(req.nextUrl.searchParams.get('keyword')),
-            techs: StringUtils.nvl(req.nextUrl.searchParams.get('techs')),
-            position: StringUtils.nvl(req.nextUrl.searchParams.get('position'))
+        const userEntity = await UserAccountDAO.getByID(client, user.fkUser)
+        const postEntity = await PostDAO.getMyPosts(client, user.fkUser)
+
+        if (userEntity === undefined) {
+            throw new ServerExeption()
         }
 
-        const posts = await PostDAO.searchPosts(client, user.fkUser, json.keyword, json.techs, json.position)
-
         return NextResponse.json({
-            posts: posts.map((v) => PostConverter.toVO(v))
+            user: User_AccountConverter.toVO(userEntity),
+            myPost: postEntity.map((v) => PostConverter.toVO(v))
         })
     })
 }

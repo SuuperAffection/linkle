@@ -9,6 +9,7 @@ CREATE TABLE public.User_Account (
     pw text NOT NULL,
     techs text,
     department text,
+    contact text,
     comment text,
     deleteFlag boolean NOT NULL DEFAULT FALSE,
     createUser bigint,

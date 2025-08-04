@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { LoginAPI } from "./type"
 import { ErrorInfo } from "react"
 import { ServerHandler } from "@/lib/server/util/db_util"
-import { StringUtils } from "@/lib/common/util/string_utils";
+//import { StringUtils } from "@/lib/common/util/string_utils";
 import { SessionDAO } from "@/lib/server/dao/session";
 import { UserAccountDAO } from "@/lib/server/dao/user_account";
 import { AuthenticationExeption, ServerExeption } from "@/lib/server/util/exeption";
@@ -13,16 +13,16 @@ export async function POST(
     req: NextRequest
 ): Promise<NextResponse<LoginAPI.POST.Response | ErrorInfo>> {
     return ServerHandler.transaction(async (client) => {
-        const token = StringUtils.nvl(req.cookies.get('token')?.value)
-        const user = await SessionDAO.checkToken(client, token)
+        // const token = StringUtils.nvl(req.cookies.get('token')?.value)
+        // const user = await SessionDAO.checkToken(client, token)
 
         const nextURL = true
 
-        if (user !== undefined) {
-            return NextResponse.json({
-                nextURL
-            })
-        }
+        // if (user !== undefined) {
+        //     return NextResponse.json({
+        //         nextURL
+        //     })
+        // }
 
         let newToken: string = ''
 

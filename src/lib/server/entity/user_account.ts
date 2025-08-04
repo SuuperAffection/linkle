@@ -6,6 +6,7 @@ export namespace User_Account {
         pw: string
         techs?: string
         department?: string
+        contact?: string
         comment?: string
         deleteFlag: boolean
         createUser?: number
@@ -22,6 +23,7 @@ export namespace User_Account {
             pw: '',
             techs: '',
             department: '',
+            contact: '',
             comment: '',
             deleteFlag: false,
             version: 0

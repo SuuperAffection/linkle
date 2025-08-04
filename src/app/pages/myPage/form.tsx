@@ -5,15 +5,37 @@ import styles from './form.module.css'
 import { Button } from 'primereact/button'
 import { Recruitment } from '@/lib/components/recruitment/recruitment'
 import { useRouter } from 'next/navigation'
+import PostModal from './postModal/postModal'
+import { useEffect, useReducer } from 'react'
+import { defaultState, reducer } from './reducer'
+import { Action } from './Action'
+import { Progress } from '@/lib/components/progress/progress'
 
 export default function Form() {
     const router = useRouter()
+    const [state, dispatch] = useReducer(reducer, undefined, defaultState)
+
+    useEffect(() => {
+        Action.getMyPost(dispatch)
+    }, [])
+
+    const onBack = () => {
+        Action.editForm(dispatch, 'post', undefined)
+    }
 
     return (
         <>
             <div className={styles.masterBox}>
                 <Linkleheader>
-
+                    <div>
+                        <Button
+                            label='投稿'
+                            className={styles.postBtn}
+                            onClick={() => {
+                                Action.editForm(dispatch, 'post', undefined)
+                            }}
+                        />
+                    </div>
                 </Linkleheader>
 
                 <div className={styles.body}>
@@ -31,27 +53,23 @@ export default function Form() {
                                     <tbody>
                                         <tr>
                                             <th>名前</th>
-                                            <td>大串</td>
-                                        </tr>
-                                        <tr>
-                                            <th>学年</th>
-                                            <td>4年</td>
-                                        </tr>
-                                        <tr>
-                                            <th>連絡先</th>
-                                            <td>ogushi@gmail.com</td>
-                                        </tr>
-                                        <tr>
-                                            <th>使える技術</th>
-                                            <td>docker / Go / Python</td>
+                                            <td>{state.user.displayName ?? ''}</td>
                                         </tr>
                                         <tr>
                                             <th>学科</th>
-                                            <td>高度情報処理研究学科</td>
+                                            <td>{state.user.department ?? ''}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>連絡先</th>
+                                            <td>{state.user.contact ?? ''}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>使える技術</th>
+                                            <td>{state.user.techs ?? ''}</td>
                                         </tr>
                                         <tr>
                                             <th>コメント</th>
-                                            <td>わからないことがあれば何でも教えます。</td>
+                                            <td>{state.user.comment ?? ''}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -72,20 +90,27 @@ export default function Form() {
                         <p>過去の投稿</p>
                     </div>
 
-                    <div className={styles.posts}>
-                        <Recruitment
-                            title='ハッカソンのチームメンバー募集'
-                            description={
-                                `6月21日にあるサポーターズ主催のハッカソンに参加する予定です。
-                                                作るものはまだ決めていないので、みんなでアイデアを出しながら制作したいと思って
-                                                います。…
-                                                `}
-                            tech='未定'
-                            position='フロントエンド'
-                        />
-                    </div>
+
+                    {state.myPost.map((v) =>
+                        <div key={v.id} className={styles.posts}>
+                            <Recruitment
+                                title={`${v.title}`}
+                                description={`${v.mainText}`}
+                                tech={`${v.techs}`}
+                                position={`${v.position}`}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
+
+            {state.post &&
+                <PostModal onBack={() => onBack()}></PostModal> //onBack作成
+            }
+
+            {state.isWaiting &&
+                <Progress />
+            }
         </>
     )
 }

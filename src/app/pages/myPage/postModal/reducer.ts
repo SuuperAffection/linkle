@@ -1,5 +1,3 @@
-import { PostVO } from "@/lib/common/vo/post"
-
 export type ActionType =
     {
         type: 'EDIT_FORM'
@@ -9,35 +7,34 @@ export type ActionType =
         }
     } |
     {
-        type: 'GET_POST_REQUEST'
+        type: 'POST_REQUEST'
     } |
     {
-        type: 'GET_POST_SUCCESS'
-        payload: {
-            posts: PostVO.Type[]
-        }
+        type: 'POST_SUCCESS'
     } |
     {
-        type: 'GET_POST_FAILURE'
+        type: 'POST_FAILURE'
     }
 
 export type State = {
     isWaiting: boolean
 
-    keyword: string
+    title: string
+    mainText: string
     techs: string
+    contactTool: string
     position: string
-    posts: PostVO.Type[]
 }
 
 export function defaultState(): State {
     return {
         isWaiting: false,
 
-        keyword: '',
+        title: '',
+        mainText: ``,
         techs: '',
-        position: '',
-        posts: []
+        contactTool: '',
+        position: ''
     }
 }
 
@@ -45,38 +42,41 @@ export function reducer(state: State, action: ActionType): State {
     switch (action.type) {
         case 'EDIT_FORM': {
             switch (action.payload.targetName) {
-                case 'keyword': return {
+                case 'title': return {
                     ...state,
-                    keyword: action.payload.value
+                    title: action.payload.value
+                }
+                case 'mainText': return {
+                    ...state,
+                    mainText: action.payload.value
                 }
                 case 'techs': return {
                     ...state,
                     techs: action.payload.value
                 }
+                case 'contactTool': return {
+                    ...state,
+                    contactTool: action.payload.value
+                }
                 case 'position': return {
                     ...state,
                     position: action.payload.value
                 }
-                case 'clear': return {
-                    ...state,
-                    keyword: '',
-                    techs: '',
-                    position: ''
-                }
             }
         }
-        case 'GET_POST_REQUEST': return {
+        case 'POST_REQUEST': return {
             ...state,
             isWaiting: true
         }
-        case 'GET_POST_SUCCESS': return {
+        case 'POST_SUCCESS': return {
             ...state,
-            isWaiting: false,
-            posts: action.payload.posts
+            isWaiting: false
         }
-        case 'GET_POST_FAILURE': return {
+        case 'POST_FAILURE': return {
             ...state,
             isWaiting: false
         }
     }
+
+    return state
 }

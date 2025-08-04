@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { HomeAPI } from "./type";
+import { PostAPI } from "./type";
 import { ErrorInfo } from "react";
 import { ServerHandler } from "@/lib/server/util/db_util";
 import { StringUtils } from "@/lib/common/util/string_utils";
 import { SessionDAO } from "@/lib/server/dao/session";
-import { PostDAO } from "@/lib/server/dao/post";
 import { AuthenticationExeption, ServerExeption } from "@/lib/server/util/exeption";
-import { PostConverter } from "@/lib/server/converter/post";
+import { Post } from "@/lib/server/entity/post";
+import { PostDAO } from "@/lib/server/dao/post";
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(
+export async function POST(
     req: NextRequest
-): Promise<NextResponse<HomeAPI.GET.Response | ErrorInfo>> {
+): Promise<NextResponse<PostAPI.POST.Responce | ErrorInfo>> {
     return ServerHandler.transaction(async (client) => {
+
         const token = StringUtils.nvl(req.cookies.get('token')?.value)
         const user = await SessionDAO.checkToken(client, token)
 
@@ -25,16 +26,23 @@ export async function GET(
             throw new ServerExeption()
         }
 
-        const json: HomeAPI.GET.Request = {
-            keyword: StringUtils.nvl(req.nextUrl.searchParams.get('keyword')),
-            techs: StringUtils.nvl(req.nextUrl.searchParams.get('techs')),
-            position: StringUtils.nvl(req.nextUrl.searchParams.get('position'))
+        const data: Post.Type = await req.json()
+
+        const entity = Post.create()
+
+        entity.id = await PostDAO.getSequenceId(client)
+        entity.title = data.title
+        entity.mainText = data.mainText
+        entity.techs = data.techs
+        entity.contactTool = data.contactTool
+        entity.position = data.position
+        entity.createUser = user.fkUser
+        entity.updateUser = user.fkUser
+
+        if (await PostDAO.insert(client, entity) === 0) {
+            throw new ServerExeption()
         }
 
-        const posts = await PostDAO.searchPosts(client, user.fkUser, json.keyword, json.techs, json.position)
-
-        return NextResponse.json({
-            posts: posts.map((v) => PostConverter.toVO(v))
-        })
+        return NextResponse.json({})
     })
 }
